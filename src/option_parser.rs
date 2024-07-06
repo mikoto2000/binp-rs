@@ -13,7 +13,7 @@ pub struct Options {
         help = "指定したポーリング間隔(ミリ秒)で再表示します",
         default_value = "1000"
     )]
-    pub polling: u32,
+    pub polling: Option<u64>,
     #[arg(
         short,
         long,
