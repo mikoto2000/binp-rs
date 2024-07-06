@@ -1,18 +1,27 @@
 # Binp rs - Binary Parser
 
-バイナリファイルからデータを抽出するツール。
+バイナリファイルからデータを抽出するツールの Rust 実装。
 
 `offset`, `size` `type`, `endianness` を指定して、バイナリファイルのどこからどこまでをどのように解釈するかを指定できる。
+
+([mikoto2000/binp: バイナリファイルからデータを抽出するツール。](https://github.com/mikoto2000/binp) の再実装)
 
 
 # 使い方
 
 ```sh
-Usage: binp [options] FILE
-    -c, --config VALUE               設定ファイルパス
-    -a, --all                        name, value 以外のすべての項目(endianness, offset, size, type)を表示する
-    -p, --polling VALUE              指定したポーリング間隔(ミリ秒)で再表示します
-    -w, --watch                      ファイル更新時に再表示します
+Usage: binp-rs [OPTIONS] --config <CONFIG> <ARG>
+
+Arguments:
+  <ARG>  パース対象のバイナリファイル
+
+Options:
+  -c, --config <CONFIG>    設定ファイルパス
+  -w, --watch              ファイル更新時に再表示します
+  -p, --polling <POLLING>  指定したポーリング間隔(ミリ秒)で再表示します [default: 1000]
+  -a, --all                name, value 以外のすべての項目(endianness, offset, size, type)を表示する
+  -h, --help               Print help
+  -V, --version            Print version
 ```
 
 # インストール方法
