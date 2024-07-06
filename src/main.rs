@@ -29,7 +29,7 @@ fn main() {
         .expect("バイナリファイルの読み込みに失敗しました。");
 
     // 3. コンフィグを走査しながらバイナリをパース
-    let results: Vec<OutputItem> = config.iter().map(|item|
+    let results: Vec<OutputItem> = config.iter().flat_map(|item|
         binary_parser::parse(&buf, item)
     ).collect();
 

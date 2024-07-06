@@ -5,7 +5,8 @@ use crate::config::DataType;
 #[derive(Deserialize, Copy, Clone, Debug)]
 pub enum Endianness {
     BIG,
-    LITTLE
+    LITTLE,
+    NONE
 }
 
 #[derive(Deserialize, Debug)]

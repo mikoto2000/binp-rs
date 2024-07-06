@@ -19,6 +19,7 @@ pub enum DataType {
 #[derive(Deserialize, Debug)]
 #[serde(untagged)]
 pub enum ConfigItem {
+   FLAGS(BitFlagConfigItem),
    UINT8(BasicConfigItem),
    UINT16(BasicConfigItem),
    UINT32(BasicConfigItem),
@@ -27,7 +28,6 @@ pub enum ConfigItem {
    INT16(BasicConfigItem),
    INT32(BasicConfigItem),
    INT64(BasicConfigItem),
-   FLAGS(BitFlagConfigItem),
 }
 
 // 数値データの単位を表す構造体
@@ -50,29 +50,25 @@ pub struct BasicConfigItem {
 #[derive(Deserialize, Debug)]
 pub struct BitFlagConfigItem {
     // 表示名
-    name: String,
+    pub name: String,
     // ファイル先頭からのオフセット
-    offset: u8,
-    // オフセットから何バイト読み込むか
-    size: u8,
+    pub offset: usize,
     // データタイプ
     #[serde(alias = "type")]
     pub data_type: DataType,
-    // エンディアン
-    endianness: Option<String>,
     // type が FLAGS の時のみ利用されるフィールド
-    layout: Vec<LayoutItem>,
+    pub layout: Vec<LayoutItem>,
 }
 
 // ビットフラグの 1 ビットを表す構造体
 #[derive(Deserialize, Debug)]
 pub struct LayoutItem {
     // 表示名
-    name: String,
+    pub name: String,
     // ビットフラグのビット位置
-    position: u8,
+    pub position: usize,
     // ビットが 1 だった時に表示する値
-    true_label: Option<String>,
+    pub true_label: Option<String>,
     // ビットが 0 だった時に表示する値
-    false_label: Option<String>,
+    pub false_label: Option<String>,
 }
