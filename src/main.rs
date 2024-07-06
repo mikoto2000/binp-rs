@@ -1,4 +1,7 @@
-use std::{fs::File, io::BufReader};
+use std::{
+    fs::File,
+    io::{BufReader, Read},
+};
 
 use clap::Parser;
 use config::ConfigItem;
@@ -17,6 +20,10 @@ fn main() {
     let _config: Vec<ConfigItem> = serde_yaml::from_reader(config_reader).unwrap();
 
     // 2. ファイルを読み込みバイナリの配列に変換
+    let mut file = File::open(options.arg).expect("バイナリファイルのオープンに失敗しました。");
+    let mut buf = Vec::new();
+    file.read_to_end(&mut buf)
+        .expect("バイナリファイルの読み込みに失敗しました。");
 
     // 3. コンフィグを走査しながらバイナリをパース
 
