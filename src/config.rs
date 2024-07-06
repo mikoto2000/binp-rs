@@ -1,36 +1,53 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-// コンフィグの要素は、以下 5 種類のどれかとなる
-// - UINT8
-// - UINT16
-// - UINT32
-// - UINT64
-// - FLAGS
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(tag = "type")]
+use crate::types::Endianness;
+
+#[derive(Copy, Clone, Deserialize, Debug)]
+pub enum DataType {
+    UINT8,
+    UINT16,
+    UINT32,
+    UINT64,
+    INT8,
+    INT16,
+    INT32,
+    INT64,
+    FLAGS,
+}
+
+// コンフィグの要素は、以下 2 種類のどれかとなる
+#[derive(Deserialize, Debug)]
+#[serde(untagged)]
 pub enum ConfigItem {
-    UINT8(BasicConfigItem),
-    UINT16(BasicConfigItem),
-    UINT32(BasicConfigItem),
-    UINT64(BasicConfigItem),
-    FLAGS(BitFlagConfigItem),
+   UINT8(BasicConfigItem),
+   UINT16(BasicConfigItem),
+   UINT32(BasicConfigItem),
+   UINT64(BasicConfigItem),
+   INT8(BasicConfigItem),
+   INT16(BasicConfigItem),
+   INT32(BasicConfigItem),
+   INT64(BasicConfigItem),
+   FLAGS(BitFlagConfigItem),
 }
 
 // 数値データの単位を表す構造体
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct BasicConfigItem {
     // 表示名
-    name: String,
+    pub name: String,
     // ファイル先頭からのオフセット
-    offset: u8,
+    pub offset: usize,
     // オフセットから何バイト読み込むか
-    size: u8,
+    pub size: usize,
+    // データタイプ
+    #[serde(alias = "type")]
+    pub data_type: DataType,
     // エンディアン
-    endianness: Option<String>,
+    pub endianness: Option<Endianness>,
 }
 
 // ビットフラグデータの単位を表す構造体
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct BitFlagConfigItem {
     // 表示名
     name: String,
@@ -38,6 +55,9 @@ pub struct BitFlagConfigItem {
     offset: u8,
     // オフセットから何バイト読み込むか
     size: u8,
+    // データタイプ
+    #[serde(alias = "type")]
+    pub data_type: DataType,
     // エンディアン
     endianness: Option<String>,
     // type が FLAGS の時のみ利用されるフィールド
@@ -45,7 +65,7 @@ pub struct BitFlagConfigItem {
 }
 
 // ビットフラグの 1 ビットを表す構造体
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 pub struct LayoutItem {
     // 表示名
     name: String,

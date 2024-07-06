@@ -1,10 +1,7 @@
 use clap::Parser;
 
 #[derive(Parser, Debug)]
-#[command(
-    version,
-    about = "バイナリファイルからデータを抽出するツール。",
-)]
+#[command(version, about = "バイナリファイルからデータを抽出するツール。")]
 pub struct Options {
     #[arg(short, long, help = "設定ファイルパス")]
     pub config: String,
@@ -24,8 +21,6 @@ pub struct Options {
     )]
     pub all: bool,
 
-    #[arg(
-        help = "パース対象のバイナリファイル"
-    )]
+    #[arg(help = "パース対象のバイナリファイル")]
     pub arg: String,
 }
