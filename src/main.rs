@@ -5,7 +5,7 @@ use std::{
 
 use clap::Parser;
 use config::ConfigItem;
-use tabled::{settings::{style::HorizontalLine, Style}, Table};
+use tabled::{settings::{object::Columns, style::HorizontalLine, Disable, Style}, Table};
 use types::OutputItem;
 
 mod binary_parser;
@@ -42,6 +42,13 @@ fn main() {
             .horizontals([(1, HorizontalLine::inherit(Style::ascii()))])
             .remove_horizontal(),
     );
+
+    if !options.all {
+        table.with(Disable::column(Columns::single(4)));
+        table.with(Disable::column(Columns::single(3)));
+        table.with(Disable::column(Columns::single(2)));
+        table.with(Disable::column(Columns::single(0)));
+    }
 
     println!("{}", table);
 }
