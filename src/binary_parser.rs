@@ -22,7 +22,6 @@ pub fn parse(binary: &Vec<u8>, config_item: &ConfigItem) -> Vec<OutputItem> {
 }
 
 fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> OutputItem {
-    println!("{:?}", config_item.data_type);
     match &config_item.data_type {
         config::DataType::UINT8 => {
             create_output_item(config_item, (binary[config_item.offset] as u8).to_string())
@@ -77,7 +76,7 @@ fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> Output
                     ),
                     _ => panic!("no support size!"),
                 },
-                Some(Endianness::NONE) | None => panic!("Unknown endianness!"),
+                None => panic!("Unknown endianness!"),
             }
         }
         config::DataType::INT8 => {
@@ -133,7 +132,7 @@ fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> Output
                     ),
                     _ => panic!("no support size!"),
                 },
-                Some(Endianness::NONE) | None => panic!("Unknown endianness!"),
+                None => panic!("Unknown endianness!"),
             }
         }
         _ => panic!("not supported!"),
@@ -142,11 +141,11 @@ fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> Output
 
 fn create_output_item(config_item: &BasicConfigItem, value: String) -> OutputItem {
     OutputItem {
-        endianness: config_item.endianness.unwrap().clone(),
+        endianness: format!("{:?}", config_item.endianness.unwrap()),
         name: config_item.name.clone(),
         offset: config_item.offset,
         size: config_item.size,
-        data_type: config_item.data_type.clone(),
+        data_type: format!("{:?}", config_item.data_type),
         value: value,
     }
 }
@@ -168,11 +167,11 @@ fn parse_bitflag_value(binary: &Vec<u8>, config_item: &BitFlagConfigItem) -> Vec
             };
 
             OutputItem {
-                endianness: Endianness::NONE,
+                endianness: "-".to_string(),
                 name: l.name.clone(),
                 offset: config_item.offset,
                 size: 1,
-                data_type: config_item.data_type.clone(),
+                data_type: format!("{:?}", config_item.data_type),
                 value: value,
             }
         })

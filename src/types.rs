@@ -1,12 +1,10 @@
 use serde::Deserialize;
-
-use crate::config::DataType;
+use tabled::Tabled;
 
 #[derive(Deserialize, Copy, Clone, Debug)]
 pub enum Endianness {
     BIG,
-    LITTLE,
-    NONE
+    LITTLE
 }
 
 #[derive(Deserialize, Debug)]
@@ -22,12 +20,12 @@ pub enum Type {
     FLAGS,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Tabled)]
 pub struct OutputItem {
-    pub endianness: Endianness,
+    pub endianness: String,
     pub name: String,
     pub offset: usize,
     pub size: usize,
-    pub data_type: DataType,
+    pub data_type: String,
     pub value: String,
 }

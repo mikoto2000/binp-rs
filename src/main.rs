@@ -5,6 +5,7 @@ use std::{
 
 use clap::Parser;
 use config::ConfigItem;
+use tabled::{settings::{style::HorizontalLine, Style}, Table};
 use types::OutputItem;
 
 mod binary_parser;
@@ -29,11 +30,18 @@ fn main() {
         .expect("バイナリファイルの読み込みに失敗しました。");
 
     // 3. コンフィグを走査しながらバイナリをパース
-    let results: Vec<OutputItem> = config.iter().flat_map(|item|
-        binary_parser::parse(&buf, item)
-    ).collect();
+    let results: Vec<OutputItem> = config
+        .iter()
+        .flat_map(|item| binary_parser::parse(&buf, item))
+        .collect();
 
     // 4. 「3.」の結果を表示
+    let mut table = Table::new(results);
+    table.with(
+        Style::ascii()
+            .horizontals([(1, HorizontalLine::inherit(Style::ascii()))])
+            .remove_horizontal(),
+    );
 
-    println!("results: {:?}", results);
+    println!("{}", table);
 }
