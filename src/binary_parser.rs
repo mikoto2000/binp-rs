@@ -7,9 +7,7 @@ use crate::{
 
 pub fn parse(binary: &Vec<u8>, config_item: &ConfigItem) -> Vec<OutputItem> {
     match config_item {
-        ConfigItem::FLAGS(e) => {
-            parse_bitflag_value(binary, e)
-        }
+        ConfigItem::FLAGS(e) => parse_bitflag_value(binary, e),
         ConfigItem::UINT8(e)
         | ConfigItem::UINT16(e)
         | ConfigItem::UINT32(e)
@@ -22,7 +20,7 @@ pub fn parse(binary: &Vec<u8>, config_item: &ConfigItem) -> Vec<OutputItem> {
 }
 
 fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> OutputItem {
-    match &config_item.data_type {
+    let mut output_item = match &config_item.data_type {
         config::DataType::UINT8 => {
             create_output_item(config_item, (binary[config_item.offset] as u8).to_string())
         }
@@ -136,7 +134,20 @@ fn parse_number_value(binary: &Vec<u8>, config_item: &BasicConfigItem) -> Output
             }
         }
         _ => panic!("not supported!"),
+    };
+
+    // value_label があるならその定義で文字列変換を行う
+    let ci = config_item.clone();
+    if ci.value_label.is_some() {
+        let value_label = ci.value_label.unwrap();
+        let replace_value = value_label.get(&output_item.value);
+        match replace_value {
+            Some(v) => output_item.value = v.to_string(),
+            None => { /* do nothing */ }
+        }
     }
+
+    return output_item;
 }
 
 fn create_output_item(config_item: &BasicConfigItem, value: String) -> OutputItem {

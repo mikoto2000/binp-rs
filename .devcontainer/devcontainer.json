@@ -1,4 +1,7 @@
 {
-	"name": "Rust",
-	"image": "mikoto2000/rust:latest"
+  "name": "Rust",
+  "image": "mikoto2000/rust:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  }
 }

@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::Deserialize;
 
 use crate::types::Endianness;
@@ -19,19 +21,19 @@ pub enum DataType {
 #[derive(Deserialize, Debug)]
 #[serde(untagged)]
 pub enum ConfigItem {
-   FLAGS(BitFlagConfigItem),
-   UINT8(BasicConfigItem),
-   UINT16(BasicConfigItem),
-   UINT32(BasicConfigItem),
-   UINT64(BasicConfigItem),
-   INT8(BasicConfigItem),
-   INT16(BasicConfigItem),
-   INT32(BasicConfigItem),
-   INT64(BasicConfigItem),
+    FLAGS(BitFlagConfigItem),
+    UINT8(BasicConfigItem),
+    UINT16(BasicConfigItem),
+    UINT32(BasicConfigItem),
+    UINT64(BasicConfigItem),
+    INT8(BasicConfigItem),
+    INT16(BasicConfigItem),
+    INT32(BasicConfigItem),
+    INT64(BasicConfigItem),
 }
 
 // 数値データの単位を表す構造体
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct BasicConfigItem {
     // 表示名
     pub name: String,
@@ -44,6 +46,8 @@ pub struct BasicConfigItem {
     pub data_type: DataType,
     // エンディアン
     pub endianness: Option<Endianness>,
+    // 特定の値を別の文字にマッピングする定義
+    pub value_label: Option<HashMap<String, String>>,
 }
 
 // ビットフラグデータの単位を表す構造体
